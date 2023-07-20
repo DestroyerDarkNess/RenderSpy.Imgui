@@ -13,3 +13,4 @@ C:\Users\58424\Documents\Visual Studio 2022\Projects\RenderSpy.Imgui\RenderSpy.I
 C:\Users\58424\Documents\Visual Studio 2022\Projects\RenderSpy.Imgui\RenderSpy.Imgui\obj\Debug\RenderSpy.Imgui.pdb
 C:\Users\58424\Documents\Visual Studio 2022\Projects\RenderSpy.Imgui\RenderSpy.Imgui\bin\Debug\RenderSpy.Imgui.dll.config
 C:\Users\58424\Documents\Visual Studio 2022\Projects\RenderSpy.Imgui\RenderSpy.Imgui\bin\Debug\System.Numerics.Vectors.dll
+C:\Users\58424\Documents\Visual Studio 2022\Projects\RenderSpy.Imgui\RenderSpy.Imgui\bin\Debug\ImGui.NET.pdb

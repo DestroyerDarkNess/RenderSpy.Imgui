@@ -36,7 +36,7 @@
   <ItemGroup>
     <Reference Include="ImGui.NET, Version=1.72.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Libs\ImGui.NET.dll</HintPath>
+      <HintPath>..\..\ImGui.NET-autogen\bin\Debug\ImGui.NET\netstandard2.0\ImGui.NET.dll</HintPath>
     </Reference>
     <Reference Include="RenderSpy">
       <HintPath>..\..\RenderSpy\RenderSpy\bin\Debug\ILMerge\RenderSpy.dll</HintPath>

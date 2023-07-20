@@ -21,7 +21,7 @@ namespace RenderSpy.Imgui
 
             try {
                 // Extract important and native resources.
-                System.IO.File.WriteAllBytes("cimgui.dll", Properties.Resources.cimgui);
+                //System.IO.File.WriteAllBytes("cimgui.dll", Properties.Resources.cimgui);
                
                 //Fix DirectInput8
                 IntPtr handle = WinApi.GetModuleHandle("dinput8.dll");
