@@ -39,7 +39,7 @@ namespace RenderSpy.Imgui
             return Imgui_Ini;
         }
 
-        public bool ImguiHook_RenderBegin(bool ShowCursor)
+        public bool ImguiHook_RenderBegin()
         {
             bool Result = true;
 
@@ -52,8 +52,7 @@ namespace RenderSpy.Imgui
 
                     ImGuiNET.ImGui.NewFrame();
 
-                    ImGuiIOPtr IO = ImGuiNET.ImGui.GetIO();
-                    IO.MouseDrawCursor = ShowCursor;
+                
                 }
             }
             catch (Exception ex)

@@ -1,0 +1,10 @@
+C:\Users\58424\Documents\Visual Studio 2022\Projects\RenderSpy.Imgui\ImGuiFuncs\bin\Debug\ImGuiFuncs.dll
+C:\Users\58424\Documents\Visual Studio 2022\Projects\RenderSpy.Imgui\ImGuiFuncs\bin\Debug\ImGuiFuncs.pdb
+C:\Users\58424\Documents\Visual Studio 2022\Projects\RenderSpy.Imgui\ImGuiFuncs\bin\Debug\ImGui.NET.dll
+C:\Users\58424\Documents\Visual Studio 2022\Projects\RenderSpy.Imgui\ImGuiFuncs\bin\Debug\System.Numerics.Vectors.dll
+C:\Users\58424\Documents\Visual Studio 2022\Projects\RenderSpy.Imgui\ImGuiFuncs\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\58424\Documents\Visual Studio 2022\Projects\RenderSpy.Imgui\ImGuiFuncs\obj\Debug\ImGuiFuncs.csproj.AssemblyReference.cache
+C:\Users\58424\Documents\Visual Studio 2022\Projects\RenderSpy.Imgui\ImGuiFuncs\obj\Debug\ImGuiFuncs.csproj.CoreCompileInputs.cache
+C:\Users\58424\Documents\Visual Studio 2022\Projects\RenderSpy.Imgui\ImGuiFuncs\obj\Debug\ImGuiFuncs.csproj.CopyComplete
+C:\Users\58424\Documents\Visual Studio 2022\Projects\RenderSpy.Imgui\ImGuiFuncs\obj\Debug\ImGuiFuncs.dll
+C:\Users\58424\Documents\Visual Studio 2022\Projects\RenderSpy.Imgui\ImGuiFuncs\obj\Debug\ImGuiFuncs.pdb

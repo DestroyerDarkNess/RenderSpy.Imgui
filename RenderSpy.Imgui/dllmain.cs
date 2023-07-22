@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 using ImGuiNET;
@@ -22,8 +23,8 @@ namespace RenderSpy.Imgui
     {
         private static bool Logger = false;
         public static IntPtr GameHandle = IntPtr.Zero;
-        public static int KeyMenu = 0x2D; // Or 45 =  VK_INSERT
-
+        public static int KeyMenu = (int)Keys.Insert; // Or 45 =  VK_INSERT
+        public static int WheelDelta = SystemInformation.MouseWheelScrollDelta;
 
 
         [InjectionEntryPoint(CreateThread = true, MergeLibs = true)]
@@ -42,6 +43,7 @@ namespace RenderSpy.Imgui
 
                 RenderSpy.Graphics.GraphicsType GraphicsT = RenderSpy.Graphics.Detector.GetCurrentGraphicsType();
                 RenderSpy.Interfaces.IHook CurrentHook = null;
+                RenderSpy.Interfaces.IHook DinputHook = null;
 
                 LogConsole("Current Graphics: " + GraphicsT.ToString() + " LIB: " + RenderSpy.Graphics.Detector.GetLibByEnum(GraphicsT));
 
@@ -59,7 +61,7 @@ namespace RenderSpy.Imgui
                             {
                                 if (ImguiHooker.ImguiHook_Ini(device, GameHandle) == true && ShowImGui_UI == true)
                                 {
-                                    ImguiHooker.ImguiHook_RenderBegin(ShowImGui_UI);
+                                    ImguiHooker.ImguiHook_RenderBegin();
 
                                     UI();
 
@@ -80,7 +82,9 @@ namespace RenderSpy.Imgui
 
                 IHook InputHook = null;
 
-                if (ResourcesExtractor.UsesModernHook == true)
+                bool Runtime = true;
+
+                if (ResourcesExtractor.DirectInputFuck == true)
                 {
                     GetWindowLongPtr GetWindowLongPtr_Hook = new GetWindowLongPtr();
                     GetWindowLongPtr_Hook.WindowHandle = GameHandle;
@@ -90,10 +94,16 @@ namespace RenderSpy.Imgui
                     {
                         try
                         {
+                            if ((WM)msg == WM.KEYDOWN && wParam.ToInt32() == (int)Keys.F2)
+                                Runtime = !Runtime;
+
                             if (ImguiHooker.Imgui_Ini == true)
                             {
                                 if ((WM)msg == WM.KEYDOWN && wParam.ToInt32() == KeyMenu)
                                     ShowImGui_UI = !ShowImGui_UI;
+
+                                ImGuiIOPtr IO = ImGuiNET.ImGui.GetIO();
+                                IO.MouseDrawCursor = ShowImGui_UI;
 
                                 if (ShowImGui_UI == true)
                                     ImplWin32.WndProcHandler(hWnd, msg, wParam.ToInt32(), (uint)lParam);
@@ -104,6 +114,46 @@ namespace RenderSpy.Imgui
                             //LogConsole(ex.Message); //Fix error : The arithmetic operation has caused an overflow.
                         }
                         return IntPtr.Zero;
+                    };
+
+                    DirectInputHook DirectInputHook_Hook = new DirectInputHook();
+                    DirectInputHook_Hook.WindowHandle = GameHandle;
+                    DirectInputHook_Hook.Install();
+                    DinputHook = DirectInputHook_Hook;
+                    DirectInputHook_Hook.GetDeviceState += (IntPtr hDevice, int cbData, IntPtr lpvData) =>
+                    {
+
+                        if (ImguiHooker.Imgui_Ini == true && ShowImGui_UI)
+                        {
+                            try {
+
+                                int Result = DirectInputHook_Hook.Hook_orig(hDevice, cbData, lpvData);
+
+                                if (Result == 0)
+                                {
+                                    ImGuiIOPtr IO = ImGuiNET.ImGui.GetIO();
+
+                                    if (cbData == 16 || cbData == 20)
+                                    {
+                                        DirectInputHook.LPDIMOUSESTATE MouseData = DirectInputHook_Hook.GetMouseData(lpvData);
+                                        IO.MouseDown[0] = (MouseData.rgbButtons[0] != 0);
+                                        IO.MouseDown[1] = (MouseData.rgbButtons[1] != 0);
+
+                                        IO.MouseWheel += (float)(MouseData.lZ / (float)WheelDelta);
+
+                                    }
+
+                                }
+                                return Result;
+                            }
+                            catch (Exception ex)
+                            {
+                                //LogConsole(ex.Message); //Fix error : The arithmetic operation has caused an overflow.
+                            }
+
+                        }
+
+                        return DirectInputHook_Hook.Hook_orig(hDevice, cbData, lpvData);
                     };
                 }
                 else
@@ -117,10 +167,16 @@ namespace RenderSpy.Imgui
 
                         try
                         {
+                            if ((WM)msg == WM.KEYDOWN && wParam.ToInt32() == (int)Keys.F2)
+                                Runtime = !Runtime;
+
                             if (ImguiHooker.Imgui_Ini == true)
                             {
                                 if ((WM)msg == WM.KEYDOWN && wParam.ToInt32() == KeyMenu)
                                     ShowImGui_UI = !ShowImGui_UI;
+
+                                ImGuiIOPtr IO = ImGuiNET.ImGui.GetIO();
+                                IO.MouseDrawCursor = ShowImGui_UI;
 
                                 if (ShowImGui_UI == true)
                                     ImplWin32.WndProcHandler(hWnd, msg, (long)wParam, (uint)lParam);
@@ -143,26 +199,53 @@ namespace RenderSpy.Imgui
                     return false;
                 };
 
-                bool Runtime = true;
-
                 while (Runtime)
                 {
-                    Thread.Sleep(10);
 
-                    int EndkeyState = WinApi.GetAsyncKeyState(Keys.F2); // Panic Key , Terminate cheat....
+                    // ----->>>>> External code without WNDPROC Hooks // DirectInputHook <<<<<--------
 
-                    if (EndkeyState == 1 || EndkeyState == -32767) { Runtime = !Runtime; } 
+                    // Thread.Sleep(100);
+
+                    //int EndkeyState = WinApi.GetAsyncKeyState(Keys.F2); // Panic Key , Terminate cheat....
+
+                    //if (EndkeyState == 1 || EndkeyState == -32767) { Runtime = !Runtime; }
+
+
+                    //if (ImguiHooker.Imgui_Ini == true && ShowImGui_UI) {
+
+                    //    ImGuiIOPtr IO = ImGuiNET.ImGui.GetIO();
+                    //    IO.MouseDrawCursor = ShowImGui_UI;
+
+                    //    // Alternative , use dinput8.dll to rawinput (required Instalation) : https://github.com/geeky/dinput8wrapper
+                    //    // Review the commented code in the class "ResourcesExtractor" To implement.
+
+                    //    // Simple Mouse Hook XD
+                    //    if (ResourcesExtractor.DirectInputFuck == true) {
+                    //        int LButton = WinApi.GetAsyncKeyState(Keys.LButton); IO.MouseDown[0] = (LButton == 1 || LButton == -32767);
+
+                    //        int RButton = WinApi.GetAsyncKeyState(Keys.RButton); IO.MouseDown[1] = (RButton == 1 || RButton == -32767);
+
+                    //        int MButton = WinApi.GetAsyncKeyState(Keys.MButton); IO.MouseDown[2] = (MButton == 1 || MButton == -32767);
+
+                    //        int XButton1 = WinApi.GetAsyncKeyState(Keys.XButton1); IO.MouseDown[3] = (XButton1 == 1 || XButton1 == -32767);
+
+                    //        int XButton2 = WinApi.GetAsyncKeyState(Keys.XButton2); IO.MouseDown[4] = (XButton2 == 1 || XButton2 == -32767);
+                    //    }
+
+
+                    //}
 
 
                 }
 
-                CurrentHook.Uninstall();
-                InputHook.Uninstall();
-                NewHookCursor.Uninstall();
+                CurrentHook?.Uninstall();
+                InputHook?.Uninstall();
+                NewHookCursor?.Uninstall();
+                DinputHook?.Uninstall();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Imgui Hook Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error: " + ex.Message + Environment.NewLine + Environment.NewLine + ex.StackTrace, "Imgui Hook Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

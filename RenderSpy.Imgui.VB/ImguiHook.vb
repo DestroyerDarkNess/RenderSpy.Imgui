@@ -30,7 +30,7 @@ Public Class ImguiHook
         Return Imgui_Ini
     End Function
 
-    Public Function ImguiHook_RenderBegin(ByVal ShowCursor As Boolean) As Boolean
+    Public Function ImguiHook_RenderBegin() As Boolean
         Dim Result As Boolean = True
 
         Try
@@ -40,9 +40,6 @@ Public Class ImguiHook
                 ImplWin32.NewFrame()
 
                 ImGuiNET.ImGui.NewFrame()
-
-                Dim IO As ImGuiIOPtr = ImGuiNET.ImGui.GetIO()
-                IO.MouseDrawCursor = ShowCursor
 
             End If
 

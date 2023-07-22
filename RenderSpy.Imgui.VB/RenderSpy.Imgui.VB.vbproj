@@ -47,8 +47,12 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ImGui.NET">
-      <HintPath>..\Libs\ImGui.NET.dll</HintPath>
+    <Reference Include="ImGui.NET, Version=1.72.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ImGuiFuncs\bin\Debug\ImGui.NET.dll</HintPath>
+    </Reference>
+    <Reference Include="ImGuiFuncs">
+      <HintPath>..\ImGuiFuncs\bin\Debug\ImGuiFuncs.dll</HintPath>
     </Reference>
     <Reference Include="RenderSpy">
       <HintPath>..\RenderSpy.Imgui\bin\Debug\RenderSpy.dll</HintPath>
@@ -123,9 +127,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\cimgui.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\dinput8.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <Import Project="..\packages\NETBuilderInjection.1.0.2\build\NETBuilderInjection.targets" Condition="Exists('..\packages\NETBuilderInjection.1.0.2\build\NETBuilderInjection.targets')" />

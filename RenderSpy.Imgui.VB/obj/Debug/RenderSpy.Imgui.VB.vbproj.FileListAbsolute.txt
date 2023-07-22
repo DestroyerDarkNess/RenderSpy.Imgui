@@ -14,3 +14,5 @@ C:\Users\58424\Documents\Visual Studio 2022\Projects\RenderSpy.Imgui\RenderSpy.I
 C:\Users\58424\Documents\Visual Studio 2022\Projects\RenderSpy.Imgui\RenderSpy.Imgui.VB\obj\Debug\RenderSpy.Imgui.VB.dll
 C:\Users\58424\Documents\Visual Studio 2022\Projects\RenderSpy.Imgui\RenderSpy.Imgui.VB\obj\Debug\RenderSpy.Imgui.VB.xml
 C:\Users\58424\Documents\Visual Studio 2022\Projects\RenderSpy.Imgui\RenderSpy.Imgui.VB\obj\Debug\RenderSpy.Imgui.VB.pdb
+C:\Users\58424\Documents\Visual Studio 2022\Projects\RenderSpy.Imgui\RenderSpy.Imgui.VB\bin\Debug\ImGuiFuncs.dll
+C:\Users\58424\Documents\Visual Studio 2022\Projects\RenderSpy.Imgui\RenderSpy.Imgui.VB\bin\Debug\ImGuiFuncs.pdb
