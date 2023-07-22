@@ -1,3 +1,7 @@
+C:\Users\58424\Documents\Visual Studio 2022\Projects\RenderSpy.Imgui\RenderSpy.Imgui.VB\obj\Debug\RenderSpy.Imgui.VB.vbproj.AssemblyReference.cache
+C:\Users\58424\Documents\Visual Studio 2022\Projects\RenderSpy.Imgui\RenderSpy.Imgui.VB\obj\Debug\RenderSpy.Imgui.VB.Resources.resources
+C:\Users\58424\Documents\Visual Studio 2022\Projects\RenderSpy.Imgui\RenderSpy.Imgui.VB\obj\Debug\RenderSpy.Imgui.VB.vbproj.GenerateResource.cache
+C:\Users\58424\Documents\Visual Studio 2022\Projects\RenderSpy.Imgui\RenderSpy.Imgui.VB\obj\Debug\RenderSpy.Imgui.VB.vbproj.CoreCompileInputs.cache
 C:\Users\58424\Documents\Visual Studio 2022\Projects\RenderSpy.Imgui\RenderSpy.Imgui.VB\bin\Debug\RenderSpy.Imgui.VB.dll
 C:\Users\58424\Documents\Visual Studio 2022\Projects\RenderSpy.Imgui\RenderSpy.Imgui.VB\bin\Debug\RenderSpy.Imgui.VB.pdb
 C:\Users\58424\Documents\Visual Studio 2022\Projects\RenderSpy.Imgui\RenderSpy.Imgui.VB\bin\Debug\RenderSpy.Imgui.VB.xml
@@ -6,10 +10,6 @@ C:\Users\58424\Documents\Visual Studio 2022\Projects\RenderSpy.Imgui\RenderSpy.I
 C:\Users\58424\Documents\Visual Studio 2022\Projects\RenderSpy.Imgui\RenderSpy.Imgui.VB\bin\Debug\System.Numerics.Vectors.dll
 C:\Users\58424\Documents\Visual Studio 2022\Projects\RenderSpy.Imgui\RenderSpy.Imgui.VB\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
 C:\Users\58424\Documents\Visual Studio 2022\Projects\RenderSpy.Imgui\RenderSpy.Imgui.VB\bin\Debug\RenderSpy.pdb
-C:\Users\58424\Documents\Visual Studio 2022\Projects\RenderSpy.Imgui\RenderSpy.Imgui.VB\obj\Debug\RenderSpy.Imgui.VB.vbproj.AssemblyReference.cache
-C:\Users\58424\Documents\Visual Studio 2022\Projects\RenderSpy.Imgui\RenderSpy.Imgui.VB\obj\Debug\RenderSpy.Imgui.VB.Resources.resources
-C:\Users\58424\Documents\Visual Studio 2022\Projects\RenderSpy.Imgui\RenderSpy.Imgui.VB\obj\Debug\RenderSpy.Imgui.VB.vbproj.GenerateResource.cache
-C:\Users\58424\Documents\Visual Studio 2022\Projects\RenderSpy.Imgui\RenderSpy.Imgui.VB\obj\Debug\RenderSpy.Imgui.VB.vbproj.CoreCompileInputs.cache
 C:\Users\58424\Documents\Visual Studio 2022\Projects\RenderSpy.Imgui\RenderSpy.Imgui.VB\obj\Debug\RenderSpy.Imgui.VB.vbproj.CopyComplete
 C:\Users\58424\Documents\Visual Studio 2022\Projects\RenderSpy.Imgui\RenderSpy.Imgui.VB\obj\Debug\RenderSpy.Imgui.VB.dll
 C:\Users\58424\Documents\Visual Studio 2022\Projects\RenderSpy.Imgui\RenderSpy.Imgui.VB\obj\Debug\RenderSpy.Imgui.VB.xml

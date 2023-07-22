@@ -34,12 +34,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ImGui.NET, Version=1.72.0.0, Culture=neutral, processorArchitecture=x86">
+    <Reference Include="ImGui.NET, Version=1.65.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\ImGui.NET-autogen\bin\Debug\ImGui.NET\netstandard2.0\ImGui.NET.dll</HintPath>
+      <HintPath>..\Libs\ImGui.NET.dll</HintPath>
     </Reference>
     <Reference Include="RenderSpy">
       <HintPath>..\..\RenderSpy\RenderSpy\bin\Debug\ILMerge\RenderSpy.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.DirectInput, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.DirectInput.4.2.0\lib\net45\SharpDX.DirectInput.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -63,13 +66,13 @@
   <ItemGroup>
     <Compile Include="dllmain.cs" />
     <Compile Include="ImguiHook.cs" />
-    <Compile Include="PreLoads.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="ResourcesExtractor.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

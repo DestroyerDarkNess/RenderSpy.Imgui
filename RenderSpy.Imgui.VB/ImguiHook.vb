@@ -11,10 +11,6 @@ Public Class ImguiHook
     Public Property Imgui_Ini As Boolean = False
     Public Property D3dVersion As Graphics.GraphicsType = Graphics.GraphicsType.unknown
 
-
-
-
-
     Public Function ImguiHook_Ini(ByVal Adress As IntPtr, ByVal GameHandle As IntPtr) As Boolean
         Try
             If D3dVersion = Graphics.GraphicsType.d3d9 Then

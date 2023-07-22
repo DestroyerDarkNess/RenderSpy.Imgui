@@ -2,6 +2,7 @@
 
 
 
+Imports System.IO
 Imports System.Runtime.InteropServices
 Imports System.Windows.Forms
 Imports RenderSpy.Globals
@@ -40,12 +41,22 @@ Public Class ResourcesExtractor
                 End If
             End If
 
-            System.IO.File.WriteAllBytes("cimgui.dll", My.Resources.cimgui)
+
+            Dim CimguiPath As String = Path.Combine(Path.GetTempPath(), "cimgui.dll")
+
+            Try
+                If File.Exists(CimguiPath) Then File.Delete(CimguiPath)
+            Catch ex As Exception : End Try
+
+
+            System.IO.File.WriteAllBytes(CimguiPath, My.Resources.cimgui)
+
+            LoadLibrary(CimguiPath)
 
             Return True
         Catch ex As Exception
-            Return False
-        End Try
+                Return False
+            End Try
     End Function
 
 End Class
