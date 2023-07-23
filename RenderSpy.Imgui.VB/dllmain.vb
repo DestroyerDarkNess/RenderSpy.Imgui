@@ -43,8 +43,7 @@ Public Class dllmain
             ResourcesExtractor.LoadAllRuntimes()
 
             Dim GraphicsT As RenderSpy.Graphics.GraphicsType = RenderSpy.Graphics.Detector.GetCurrentGraphicsType()
-            Dim CurrentHook As RenderSpy.Interfaces.IHook = Nothing
-            Dim DinputHook As RenderSpy.Interfaces.IHook = Nothing
+            Dim CurrentHooks As List(Of RenderSpy.Interfaces.IHook) = New List(Of RenderSpy.Interfaces.IHook)
 
             LogConsole("Current Graphics: " & GraphicsT.ToString() & " LIB: " + RenderSpy.Graphics.Detector.GetLibByEnum(GraphicsT))
 
@@ -54,7 +53,7 @@ Public Class dllmain
 
                     Dim PresentHook_9 As Graphics.d3d9.Present = New Graphics.d3d9.Present()
                     PresentHook_9.Install()
-                    CurrentHook = PresentHook_9
+                    CurrentHooks.Add(PresentHook_9)
 
                     AddHandler PresentHook_9.PresentEvent, Function(ByVal device As IntPtr, ByVal sourceRect As IntPtr, ByVal destRect As IntPtr, ByVal hDestWindowOverride As IntPtr, ByVal dirtyRegion As IntPtr)
 
@@ -69,20 +68,29 @@ Public Class dllmain
                                                                Return PresentHook_9.Present_orig(device, sourceRect, destRect, hDestWindowOverride, dirtyRegion)
                                                            End Function
 
+                    Dim ResetHook_9 As Graphics.d3d9.Reset = New Graphics.d3d9.Reset()
+                    ResetHook_9.Install()
+                    CurrentHooks.Add(ResetHook_9)
+                    AddHandler ResetHook_9.Reset_Event, Function(ByVal device As IntPtr, ByRef presentParameters As SharpDX.Direct3D9.PresentParameters)
+                                                            If ImguiHooker.Imgui_Ini = True Then ImplDX9.InvalidateDeviceObjects()
+                                                            Dim Reset As Integer = ResetHook_9.Reset_orig(device, presentParameters)
+                                                            If ImguiHooker.Imgui_Ini = True Then ImplDX9.CreateDeviceObjects()
+                                                            Return Reset
+                                                        End Function
+
                 Case Else
                     Throw New Exception("The game does not render in Directx 9 mode")
             End Select
 
-            Dim InputHook As IHook = Nothing
             Dim Runtime As Boolean = True
 
             If ResourcesExtractor.DirectInputFuck = True Then
 
-                Dim GetWindowLongPtr_Hook As GetWindowLongPtr = New GetWindowLongPtr()
-                GetWindowLongPtr_Hook.WindowHandle = GameHandle
-                GetWindowLongPtr_Hook.Install()
-                InputHook = GetWindowLongPtr_Hook
-                AddHandler GetWindowLongPtr_Hook.WindowProc, Function(ByVal hWnd As IntPtr, ByVal msg As UInteger, ByVal wParam As IntPtr, ByVal lParam As IntPtr)
+                Dim SetWindowLongPtr_Hook As SetWindowLongPtr = New SetWindowLongPtr()
+                SetWindowLongPtr_Hook.WindowHandle = GameHandle
+                SetWindowLongPtr_Hook.Install()
+                CurrentHooks.Add(SetWindowLongPtr_Hook)
+                AddHandler SetWindowLongPtr_Hook.WindowProc, Function(ByVal hWnd As IntPtr, ByVal msg As UInteger, ByVal wParam As IntPtr, ByVal lParam As IntPtr)
                                                                  Try
 
                                                                      If msg = WM.KEYDOWN AndAlso wParam.ToInt32 = Keys.F2 Then
@@ -101,6 +109,7 @@ Public Class dllmain
                                                                          If ShowImGui_UI = True Then
                                                                              ImplWin32.WndProcHandler(hWnd, msg, wParam.ToInt32, lParam.ToInt32)
                                                                          End If
+
                                                                      End If
                                                                  Catch ex As Exception
                                                                      '   LogConsole(ex.Message) Fix error : The arithmetic operation has caused an overflow.
@@ -112,7 +121,7 @@ Public Class dllmain
                 Dim DirectInputHook_Hook As DirectInputHook = New DirectInputHook()
                 DirectInputHook_Hook.WindowHandle = GameHandle
                 DirectInputHook_Hook.Install()
-                DinputHook = DirectInputHook_Hook
+                CurrentHooks.Add(DirectInputHook_Hook)
                 AddHandler DirectInputHook_Hook.GetDeviceState, Function(ByVal hDevice As IntPtr, ByVal cbData As Integer, ByVal lpvData As IntPtr)
 
                                                                     If ImguiHooker.Imgui_Ini = True AndAlso ShowImGui_UI Then
@@ -145,7 +154,7 @@ Public Class dllmain
                 Dim DefWindowProcW_Hook As DefWindowProc = New DefWindowProc()
                 DefWindowProcW_Hook.WindowHandle = GameHandle
                 DefWindowProcW_Hook.Install()
-                InputHook = DefWindowProcW_Hook
+                CurrentHooks.Add(DefWindowProcW_Hook)
                 AddHandler DefWindowProcW_Hook.WindowProc, Function(ByVal hWnd As IntPtr, ByVal msg As UInteger, ByVal wParam As IntPtr, ByVal lParam As IntPtr)
                                                                Try
 
@@ -177,6 +186,7 @@ Public Class dllmain
 
             Dim NewHookCursor As SetCursorPos = New SetCursorPos()
             NewHookCursor.Install()
+            CurrentHooks.Add(NewHookCursor)
             AddHandler NewHookCursor.SetCursorPos_Event, Function(ByVal x As Integer, ByVal y As Integer)
                                                              NewHookCursor.BlockInput = ShowImGui_UI
                                                              Return False
@@ -185,45 +195,45 @@ Public Class dllmain
 
             While Runtime
 
-                ' ----->>>>> External code without WNDPROC Hooks // DirectInputHook <<<<<--------
+                '' ----->>>>> External code without WNDPROC Hooks // DirectInputHook <<<<<--------
 
                 'Thread.Sleep(100)
 
                 'Dim EndkeyState As Integer = WinApi.GetAsyncKeyState(Keys.F2) ' Panic Key , Terminate cheat....
 
-                'If EndkeyState = 1 OrElse EndkeyState = -32767 Then
-                '    Runtime = Not Runtime
-                'End If
+                'If Not EndkeyState = 0 Then Runtime = Not Runtime
+
+                'Dim MenuKeyState As Integer = WinApi.GetAsyncKeyState(KeyMenu) ' Show Menu....
+
+                'If Not MenuKeyState = 0 Then ShowImGui_UI = Not ShowImGui_UI
+
+                '' Alternative , use dinput8.dll to rawinput (required Instalation)  https : //github.com/geeky/dinput8wrapper
+                '' Review the commented code in the class "ResourcesExtractor" To implement.
+
+                '' Simple Mouse Hook XD
 
                 'If ImguiHooker.Imgui_Ini = True AndAlso ShowImGui_UI Then
+
                 '    Dim IO As ImGuiIOPtr = ImGuiNET.ImGui.GetIO()
                 '    IO.MouseDrawCursor = ShowImGui_UI
 
-                '    ' Alternative , use dinput8.dll to rawinput (required Instalation)  https : //github.com/geeky/dinput8wrapper
-                '    ' Review the commented code in the class "ResourcesExtractor" To implement.
+                '    Dim LButton As Integer = WinApi.GetAsyncKeyState(Keys.LButton) : VisaulBasicLimitations.MouseDown(IO, 0, (LButton <> 0))
 
-                '    ' Simple Mouse Hook XD
-                '    If ResourcesExtractor.DirectInputFuck = True Then
+                '    Dim RButton As Integer = WinApi.GetAsyncKeyState(Keys.RButton) : VisaulBasicLimitations.MouseDown(IO, 1, (RButton <> 0))
 
-                '        Dim LButton As Integer = WinApi.GetAsyncKeyState(Keys.LButton) : VisaulBasicLimitations.MouseDown(IO, 0, (LButton = 1 OrElse LButton = -32767))
+                '    Dim MButton As Integer = WinApi.GetAsyncKeyState(Keys.MButton) : VisaulBasicLimitations.MouseDown(IO, 2, (MButton <> 0))
 
-                '        Dim RButton As Integer = WinApi.GetAsyncKeyState(Keys.RButton) : VisaulBasicLimitations.MouseDown(IO, 1, (RButton = 1 OrElse RButton = -32767))
+                '    Dim XButton1 As Integer = WinApi.GetAsyncKeyState(Keys.XButton1) : VisaulBasicLimitations.MouseDown(IO, 3, (XButton1 <> 0))
 
-                '        Dim MButton As Integer = WinApi.GetAsyncKeyState(Keys.MButton) : VisaulBasicLimitations.MouseDown(IO, 2, (MButton = 1 OrElse MButton = -32767))
+                '    Dim XButton2 As Integer = WinApi.GetAsyncKeyState(Keys.XButton2) : VisaulBasicLimitations.MouseDown(IO, 4, (XButton2 <> 0))
 
-                '        Dim XButton1 As Integer = WinApi.GetAsyncKeyState(Keys.XButton1) : VisaulBasicLimitations.MouseDown(IO, 3, (XButton1 = 1 OrElse XButton1 = -32767))
-
-                '        Dim XButton2 As Integer = WinApi.GetAsyncKeyState(Keys.XButton2) : VisaulBasicLimitations.MouseDown(IO, 4, (XButton2 = 1 OrElse XButton2 = -32767))
-
-                '    End If
                 'End If
 
             End While
 
-            CurrentHook?.Uninstall()
-            InputHook?.Uninstall()
-            NewHookCursor?.Uninstall()
-            DinputHook?.Uninstall()
+            For Each Hook As IHook In CurrentHooks
+                Hook.Uninstall()
+            Next
 
 
         Catch ex As Exception
