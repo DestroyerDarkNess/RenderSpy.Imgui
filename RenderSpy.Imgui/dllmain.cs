@@ -10,7 +10,6 @@ using RenderSpy.Interfaces;
 
 namespace RenderSpy.Imgui
 {
- 
 
     [AttributeUsage(AttributeTargets.Method)]
     public class InjectionEntryPoint : Attribute
@@ -18,6 +17,12 @@ namespace RenderSpy.Imgui
         public bool CreateThread { get; set; } = true;
         public string BuildTarget { get; set; } = ".dll";
         public bool MergeLibs { get; set; } = false;
+        public bool ILoader { get; set; } = false;
+        public string ProtectionRules { get; set; } = string.Empty;
+        public string ILoaderProtectionRules { get; set; } = string.Empty;
+        public string PreCompiler { get; set; } = string.Empty;
+        public string CloneTo { get; set; } = string.Empty;
+        public bool BasicILoaderProtection { get; set; } = false;
     }
 
     public class dllmain
@@ -28,7 +33,17 @@ namespace RenderSpy.Imgui
         public static int WheelDelta = SystemInformation.MouseWheelScrollDelta;
 
 
-        [InjectionEntryPoint(CreateThread = true, MergeLibs = true)]
+        [InjectionEntryPoint(CreateThread = true, MergeLibs = true, ILoader = true, BasicILoaderProtection =true, ProtectionRules = @"
+     <rule pattern=""true"" preset=""none"" inherit=""false"">
+         <protection id=""anti ildasm"" />
+         <protection id=""ctrl flow"" />
+         <protection id=""anti dump"" /> 
+         <protection id=""anti debug"" />
+         <protection id=""invalid metadata"" />
+         <protection id=""resources"" />
+         <protection id=""rename"" />
+      </rule>
+", CloneTo = "C:\\Windows\\notepad.exe")]
         public static void EntryPoint()
         {
             try

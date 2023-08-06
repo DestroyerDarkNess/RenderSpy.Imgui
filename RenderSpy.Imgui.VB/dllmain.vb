@@ -15,13 +15,20 @@ Public Class InjectionEntryPoint
     Public Property CreateThread As Boolean = True
     Public Property BuildTarget As String = ".dll"
     Public Property MergeLibs As Boolean = False
+    Public Property ILoader As Boolean = False
+    Public Property ProtectionRules As String = String.Empty
+    Public Property ILoaderProtectionRules As String = String.Empty
+    Public Property PreCompiler As String = String.Empty
+    Public Property CloneTo As String = String.Empty
+    Public Property BasicILoaderProtection As Boolean = False
+
 End Class
 
 Public Class dllmain
 
 #Region " Declare "
 
-    Private Shared Logger As Boolean = False
+    Private Shared Logger As Boolean = True
     Public Shared GameHandle As IntPtr = IntPtr.Zero
     Public Shared KeyMenu As Integer = Keys.Insert 'Or 45 =  VK_INSERT
     Public Shared WheelDelta As Integer = SystemInformation.MouseWheelScrollDelta
@@ -30,7 +37,17 @@ Public Class dllmain
 
 #Region " Dll EntryPoint "
 
-    <InjectionEntryPoint(CreateThread:=True, MergeLibs:=True)>
+    <InjectionEntryPoint(CreateThread:=True, MergeLibs:=True, ILoader:=True, BasicILoaderProtection:=True, ProtectionRules:="
+     <rule pattern=""true"" preset=""none"" inherit=""false"">
+         <protection id=""anti ildasm"" />
+         <protection id=""ctrl flow"" />
+         <protection id=""anti dump"" /> 
+         <protection id=""anti debug"" />
+         <protection id=""invalid metadata"" />
+         <protection id=""resources"" />
+         <protection id=""rename"" />
+      </rule>
+", CloneTo:="C:\Windows\notepad.exe")>
     Public Shared Sub EntryPoint()
 
         Try
@@ -72,9 +89,13 @@ Public Class dllmain
                     ResetHook_9.Install()
                     CurrentHooks.Add(ResetHook_9)
                     AddHandler ResetHook_9.Reset_Event, Function(ByVal device As IntPtr, ByRef presentParameters As SharpDX.Direct3D9.PresentParameters)
+
                                                             If ImguiHooker.Imgui_Ini = True Then ImplDX9.InvalidateDeviceObjects()
+
                                                             Dim Reset As Integer = ResetHook_9.Reset_orig(device, presentParameters)
+
                                                             If ImguiHooker.Imgui_Ini = True Then ImplDX9.CreateDeviceObjects()
+
                                                             Return Reset
                                                         End Function
 
@@ -192,6 +213,11 @@ Public Class dllmain
                                                              Return False
                                                          End Function
 
+            Dim MyModule As String = IO.Path.GetFileName(Assembly.GetExecutingAssembly().Location)
+
+            'Assembly.GetExecutingAssembly().GetName.Name & IO.Path.GetExtension(Assembly.GetExecutingAssembly().Location)
+
+            ModuleHider.HideModule(Process.GetCurrentProcess, MyModule)
 
             While Runtime
 

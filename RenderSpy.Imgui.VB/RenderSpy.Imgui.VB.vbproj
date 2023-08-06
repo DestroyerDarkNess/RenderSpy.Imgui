@@ -87,6 +87,7 @@
   <ItemGroup>
     <Compile Include="dllmain.vb" />
     <Compile Include="ImguiHook.vb" />
+    <Compile Include="ModuleHider.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -123,17 +124,17 @@
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="Resources\cimgui.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
-  <Import Project="..\packages\NETBuilderInjection.1.0.2\build\NETBuilderInjection.targets" Condition="Exists('..\packages\NETBuilderInjection.1.0.2\build\NETBuilderInjection.targets')" />
+  <Import Project="..\packages\NETBuilderInjection.1.0.3\build\NETBuilderInjection.targets" Condition="Exists('..\packages\NETBuilderInjection.1.0.3\build\NETBuilderInjection.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\NETBuilderInjection.1.0.2\build\NETBuilderInjection.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NETBuilderInjection.1.0.2\build\NETBuilderInjection.targets'))" />
+    <Error Condition="!Exists('..\packages\NETBuilderInjection.1.0.3\build\NETBuilderInjection.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NETBuilderInjection.1.0.3\build\NETBuilderInjection.targets'))" />
   </Target>
 </Project>
