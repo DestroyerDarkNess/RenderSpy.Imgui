@@ -1,4 +1,4 @@
-# RenderSpy.Imgui
+# RenderSpy.Imgui.Examples
 Easily use imgui in your favorite game.
 
 # Dependencies
