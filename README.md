@@ -1,4 +1,5 @@
 # RenderSpy.Imgui
+🛑This Repository is Obsolete, I made a better implementation, Updated ImGui, cleaner, less code and easier to use 🚬🗿 : [Universal.Hexa.ImGui.Hook](https://github.com/DestroyerDarkNess/Universal.Hexa.ImGui.Hook) 🛑
 Easily use imgui in your favorite game.
 
 # Dependencies
